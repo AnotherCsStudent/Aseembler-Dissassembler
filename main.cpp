@@ -29,48 +29,44 @@ vector<string> split(string inputString, char delimiter) {
     return tokens;
 }
 
-string clean(string inputString) {
-    string returnString;
+string strip(string inputString , char deleteChar) {
+    string returnString = "";
 
-    // iterator through the whole string
-    int i = 0;
-
-    // iterate past the leading spaces
-    bool spaces = true;
-    while (spaces && i < inputString.length()) {
-        if (inputString[i] == ' ') {
-            i++;
-        } else {
-            spaces = false;
+    for (int i = 0; i < inputString.length(); i++) {
+        if (inputString[i] != deleteChar) {
+            returnString += inputString[i];
         }
-    }
-
-    while (i < inputString.length()) {
-        returnString += inputString[i];
-        i++;
     }
 
     return returnString;
 
 }
 
+vector<string> parseLine(string inputString) {
+    vector<string> returnTokens = split(inputString, ' ');
+
+    for (vector<string>::iterator it = returnTokens.begin(); it != returnTokens.end(); it++) {
+        *it = strip(*it, ',');
+    }
+
+    return returnTokens;
+}
+
+template <typename T> void printVector(vector<T> vec) {
+    int i = 0;
+    for (auto it = vec.begin(); it != vec.end(); it++) {
+        cout << "{" << i << ", " << *it << "}, ";
+        i++;
+    }
+    cout << endl;
+}
 
 int main() {
     ifstream inFile;
     ofstream outFile;
     inFile.open(inputText);
 
-    string string1 = "";
-    string string2 = " ";
-    string string3 = "test";
-    string string4 = " test ";
-    string string5 = " wouldn't you  like to know";
-
-    cout << "string1: " << clean(string1) << endl;
-    cout << "string2: " << clean(string2) << endl;
-    cout << "string3: " << clean(string3) << endl;
-    cout << "string4: " << clean(string4) << endl;
-    cout << "string5: " << clean(string5) << endl;
+    printVector<string>(parseLine("add $t1, $t2"));
 
 
 //    TokenMap opcodes;
@@ -84,12 +80,12 @@ int main() {
 //
 //    cout << opcodes.find("test");
 
-//    if (inFile.is_open()) {
-//        string line;
-//        while (getline(inFile, line)) {
-//            cout << line << endl;
-//        }
-//    }
+    if (inFile.is_open()) {
+        string line;
+        while (getline(inFile, line)) {
+            printVector<string>(parseLine(line));
+        }
+    }
 
 
     inFile.close();
