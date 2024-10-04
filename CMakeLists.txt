@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.26)
 project(Assembler)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(Assembler main.cpp)
+add_executable(Assembler main.cpp
+        TokenMap.cpp
+        TokenMap.h)

@@ -2,35 +2,22 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include "TokenMap.h"
 // #include <windows.h>
 
 using namespace std;
 
 string inputText = "..\\input.txt";
 
-//void test() {
-//    char path[MAX_PATH];
-//    if (GetModuleFileName(NULL, path, MAX_PATH)) {
-//        std::cout << "Program is being executed from: " << path << std::endl;
-//    } else {
-//        std::cerr << "Error finding the path." << std::endl;
-//    }
-//}
-
+// splits a string based on a delimiter character
 vector<string> split(string inputString, char delimiter) {
-    vector<char> buffer = vector<char>();
     vector<string> tokens = vector<string>();
-
-
-    for (int i = 0; i < inputString.length(); i++) {
-        cout << i;
-    }
 
     int initialIndex = 0;
     int endIndex = 0;
     for (string::iterator it = inputString.begin(); it != inputString.end(); it++) {
         if (*it == delimiter) {
-            tokens.push_back(inputString.substr(initialIndex, endIndex - initialIndex  ));
+            tokens.push_back(inputString.substr(initialIndex, endIndex - initialIndex));
             initialIndex = endIndex + 1;
         }
         endIndex++;
@@ -39,21 +26,70 @@ vector<string> split(string inputString, char delimiter) {
     // flush the rest of the string into the tokens list
     tokens.push_back(inputString.substr(initialIndex, endIndex));
 
-    for (vector<string>::iterator it = tokens.begin(); it != tokens.end(); it++) {
-        cout << it->c_str() << endl;
-    }
-
     return tokens;
 }
+
+string clean(string inputString) {
+    string returnString;
+
+    // iterator through the whole string
+    int i = 0;
+
+    // iterate past the leading spaces
+    bool spaces = true;
+    while (spaces && i < inputString.length()) {
+        if (inputString[i] == ' ') {
+            i++;
+        } else {
+            spaces = false;
+        }
+    }
+
+    while (i < inputString.length()) {
+        returnString += inputString[i];
+        i++;
+    }
+
+    return returnString;
+
+}
+
 
 int main() {
     ifstream inFile;
     ofstream outFile;
     inFile.open(inputText);
 
+    string string1 = "";
+    string string2 = " ";
+    string string3 = "test";
+    string string4 = " test ";
+    string string5 = " wouldn't you  like to know";
 
-    string splittable = "This is a splittable string";
-    split(splittable, ' ');
+    cout << "string1: " << clean(string1) << endl;
+    cout << "string2: " << clean(string2) << endl;
+    cout << "string3: " << clean(string3) << endl;
+    cout << "string4: " << clean(string4) << endl;
+    cout << "string5: " << clean(string5) << endl;
+
+
+//    TokenMap opcodes;
+//
+//    try {
+//        opcodes = TokenMap("MIPS-OPCODES");
+//    } catch (runtime_error e){
+//        cout << e.what();
+//        return -1;
+//    }
+//
+//    cout << opcodes.find("test");
+
+//    if (inFile.is_open()) {
+//        string line;
+//        while (getline(inFile, line)) {
+//            cout << line << endl;
+//        }
+//    }
 
 
     inFile.close();
