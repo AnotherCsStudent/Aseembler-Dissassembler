@@ -3,6 +3,6 @@ project(Assembler)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(Assembler main.cpp
-        TokenMap.cpp
-        TokenMap.h)
+add_executable(Assembler src/main.cpp
+        src/TokenMapFactory.cpp
+        src/TokenMapFactory.h)

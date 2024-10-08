@@ -2,28 +2,26 @@
 // Created by brads on 10/3/2024.
 //
 
-#include "TokenMap.h"
+#include "TokenMapFactory.h"
 #include <unordered_map>
 #include <iostream>
 
 std::unordered_map<std::string, std::string> map = std::unordered_map<std::string, std::string>();
 
-TokenMap::TokenMap() {
+TokenMapFactory::TokenMapFactory() {
 
 }
 
-TokenMap::TokenMap(const std::string& language) {
+TokenMapFactory::TokenMapFactory(const std::string& language) {
 
-    if (language == "MIPS-OPCODES") {
-        map.insert({"test", "time"});
-    } else {
-        throw std::runtime_error("Invalid Language!");
-    }
+    if (language == "DISASSEMBLE_OP_CODES") {
+
+    } else if (language == "DISASSEMBLE_FUNC_CODES")
 
 };
 
 // finds the element
-std::string TokenMap::find(const std::string & key) {
+std::string TokenMapFactory::find(const std::string & key) {
     auto it = map.find(key);
 
     if (it != map.end()) {

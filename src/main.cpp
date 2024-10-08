@@ -2,8 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include "TokenMap.h"
-// #include <windows.h>
+#include "TokenMapFactory.h"
 
 using namespace std;
 
@@ -69,10 +68,10 @@ int main() {
     printVector<string>(parseLine("add $t1, $t2"));
 
 
-//    TokenMap opcodes;
+//    TokenMapFactory opcodes;
 //
 //    try {
-//        opcodes = TokenMap("MIPS-OPCODES");
+//        opcodes = TokenMapFactory("MIPS-OPCODES");
 //    } catch (runtime_error e){
 //        cout << e.what();
 //        return -1;
