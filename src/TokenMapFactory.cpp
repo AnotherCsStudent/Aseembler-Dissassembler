@@ -18,6 +18,8 @@ TokenMapFactory::TokenMapFactory(const std::string& language) {
 
     } else if (language == "DISASSEMBLE_FUNC_CODES") {
 
+    } else if (language == "DISASSEMBLE_REGISTER_CODES") {
+
     }
 
 };
