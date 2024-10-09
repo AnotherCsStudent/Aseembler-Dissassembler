@@ -1,4 +1,6 @@
 #include <string>
+#include <vector>
+#include "DisassemblerMaps.h"
 
 using namespace std;
 
@@ -8,8 +10,10 @@ using namespace std;
 class Disassembler {
 public:
     Disassembler();
-    string disassembleLine(int bin_line);
-    void breakLine(int bin_line);
+    std::vector<int> breakChunk(int bin_line);
+    std::string assembleLine(std::vector<int> chunkedLine);
+private:
+    DisassemblerMaps maps;
 };
 
 #endif //ASSEMBLER_DISASSEMBLER_H

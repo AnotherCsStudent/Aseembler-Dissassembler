@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include "TokenMapFactory.h"
+#include <cstdint>
 #include "Disassembler.h"
 
 using namespace std;
@@ -62,23 +62,22 @@ template <typename T> void printVector(vector<T> vec) {
 }
 
 int main() {
-    ifstream inFile;
-    ofstream outFile;
+//    ifstream inFile;
+//    ofstream outFile;
 
     int addi = 0x2149ff9c;  // addi    $t1, $t2, -100
     int add = 0x014b4820;  // add  $t1, $t2, $t3
-    int add2 = 0x014b4820;  // add  $t1, $t2, $t3
+    int addi2 = 0x200803e8; // addi $t0, $zero, 1000
+    int j = 0x081000f9; // j
+
 
     Disassembler dis = Disassembler();
 
-    dis.breakLine(add);
+    cout << "ADD: " << dis.assembleLine((dis.breakChunk(add))) << endl;
+    cout << "ADDI: " << dis.assembleLine((dis.breakChunk(addi))) << endl;
+    cout << "ADDI2: " << dis.assembleLine((dis.breakChunk(addi2))) << endl;
+    cout << "j: " << dis.assembleLine((dis.breakChunk(j))) << endl;
 
-
-
-//    inFile.open(inputText);
-
-//    printVector<string>(parseLine("add $t1, $t2"));
-//
 
 //    if (inFile.is_open()) {
 //        string line;
@@ -88,7 +87,7 @@ int main() {
 //    }
 
 
-    inFile.close();
-    outFile.close();
+//    inFile.close();
+//    outFile.close();
     return 0;
 }
