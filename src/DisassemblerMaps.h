@@ -7,9 +7,9 @@
 class DisassemblerMaps {
 public:
     DisassemblerMaps();
-    std::unordered_map<int, std::string> OPCODES;
-    std::unordered_map<int, std::string> FUNC_CODES;
-    std::unordered_map<int, std::string> REGISTERS;
+    std::unordered_map<int, std::string> OPCODES_A;
+    std::unordered_map<int, std::string> FUNC_CODES_A;
+    std::unordered_map<int, std::string> REGISTERS_A;
 
     std::string find(std::unordered_map<int, std::string> &map, int key);
 

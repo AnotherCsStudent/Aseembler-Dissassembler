@@ -7,4 +7,8 @@ add_executable(Assembler src/main.cpp
         src/DisassemblerMaps.cpp
         src/DisassemblerMaps.h
         src/Disassembler.cpp
-        src/Disassembler.h)
+        src/Disassembler.h
+        src/Assembler.cpp
+        src/Assembler.h
+        src/AssemblerMaps.cpp
+        src/AssemblerMaps.h)

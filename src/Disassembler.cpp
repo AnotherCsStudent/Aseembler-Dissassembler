@@ -4,11 +4,14 @@
 #include "Disassembler.h"
 
 
-DisassemblerMaps map = DisassemblerMaps();
+DisassemblerMaps map;
 
-Disassembler::Disassembler() = default;
+Disassembler::Disassembler() {
+        map = DisassemblerMaps();
+}
 
-vector<int> Disassembler::breakChunk(int bin_line) {
+
+vector<int> Disassembler::chunkLine(int bin_line) {
     // this will be used to break the line down into each of its chunks
     vector<int> instructions;
 
@@ -35,24 +38,24 @@ vector<int> Disassembler::breakChunk(int bin_line) {
     return instructions;
 }
 
-
-string Disassembler::assembleLine(vector<int> chunkedLine) {
+string Disassembler::disassembleLine(vector<int> chunkedLine) {
 
     string returnLine = "";
 
     // deal with r-type instructions
     if (chunkedLine[0] == 0) {
 
-        returnLine += map.find(map.FUNC_CODES, chunkedLine[5]) + " ";
-        returnLine += map.find(map.REGISTERS, chunkedLine[3]) + ", ";
-        returnLine += map.find(map.REGISTERS, chunkedLine[1]) + ", ";
-        returnLine += map.find(map.REGISTERS, chunkedLine[2]) + " ";
+        returnLine += this->map.find(this->map.FUNC_CODES_A, chunkedLine[5]) + " ";
+        returnLine += this->map.find(this->map.REGISTERS_A, chunkedLine[3]) + ", ";
+        returnLine += this->map.find(this->map.REGISTERS_A, chunkedLine[1]) + ", ";
+        returnLine += this->map.find(this->map.REGISTERS_A, chunkedLine[2]) + " ";
     // don't include jump-type instructions; so this is i-type instructions
     } else if (chunkedLine[0] != 0x02 && chunkedLine[0] != 0x03) {
-        returnLine += map.find(map.OPCODES, chunkedLine[0]) + " ";
-        returnLine += map.find(map.REGISTERS, chunkedLine[2]) + ", ";
-        returnLine += map.find(map.REGISTERS, chunkedLine[1]) + ", ";
+        returnLine += this->map.find(this->map.OPCODES_A, chunkedLine[0]) + " ";
+        returnLine += this->map.find(this->map.REGISTERS_A, chunkedLine[2]) + ", ";
+        returnLine += this->map.find(this->map.REGISTERS_A, chunkedLine[1]) + ", ";
 
+        // use a short here to C++ automatically deals with interpreting the 16-bit number
         short immediateValue = 0;
         immediateValue = immediateValue | chunkedLine[3];
         immediateValue = immediateValue << 5;
@@ -64,26 +67,31 @@ string Disassembler::assembleLine(vector<int> chunkedLine) {
 
         // j-type value
     } else {
-        returnLine += map.find(map.OPCODES, chunkedLine[0]) + " ";
+        returnLine += this->map.find(this->map.OPCODES_A, chunkedLine[0]) + " ";
 
-        int jValue = 0;
+        signed int jValue = 0;
+
+        // figure out the sign bit
+        jValue <<= 7;
 
         // merge
-        jValue &= chunkedLine[1];
+        // remove the sign bit
+        jValue |= chunkedLine[1] & 0b11111;
         jValue <<= 5;
-        jValue &= chunkedLine[2];
+        jValue |= chunkedLine[2];
         jValue <<= 5;
-        jValue &= chunkedLine[3];
+        jValue |= chunkedLine[3];
         jValue <<= 5;
-        jValue &= chunkedLine[4];
+        jValue |= chunkedLine[4];
         jValue <<= 6;
-        jValue &= chunkedLine[5];
+        jValue |= chunkedLine[5];
 
         returnLine += to_string(jValue);
-
-
-
     }
 
     return returnLine;
+}
+
+std::string Disassembler::disassembleFile(ifstream &inFile, ofstream &outFile) {
+    return std::string();
 }

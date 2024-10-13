@@ -1,56 +1,13 @@
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <vector>
-#include <cstdint>
 #include "Disassembler.h"
+#include "Assembler.h"
 
 using namespace std;
 
 string inputText = "..\\input.txt";
 
-// splits a string based on a delimiter character
-vector<string> split(string inputString, char delimiter) {
-    vector<string> tokens = vector<string>();
-
-    int initialIndex = 0;
-    int endIndex = 0;
-    for (string::iterator it = inputString.begin(); it != inputString.end(); it++) {
-        if (*it == delimiter) {
-            tokens.push_back(inputString.substr(initialIndex, endIndex - initialIndex));
-            initialIndex = endIndex + 1;
-        }
-        endIndex++;
-    }
-
-    // flush the rest of the string into the tokens list
-    tokens.push_back(inputString.substr(initialIndex, endIndex));
-
-    return tokens;
-}
-
-string strip(string inputString , char deleteChar) {
-    string returnString = "";
-
-    for (int i = 0; i < inputString.length(); i++) {
-        if (inputString[i] != deleteChar) {
-            returnString += inputString[i];
-        }
-    }
-
-    return returnString;
-
-}
-
-vector<string> parseLine(string inputString) {
-    vector<string> returnTokens = split(inputString, ' ');
-
-    for (vector<string>::iterator it = returnTokens.begin(); it != returnTokens.end(); it++) {
-        *it = strip(*it, ',');
-    }
-
-    return returnTokens;
-}
 
 template <typename T> void printVector(vector<T> vec) {
     int i = 0;
@@ -68,15 +25,22 @@ int main() {
     int addi = 0x2149ff9c;  // addi    $t1, $t2, -100
     int add = 0x014b4820;  // add  $t1, $t2, $t3
     int addi2 = 0x200803e8; // addi $t0, $zero, 1000
-    int j = 0x081000f9; // j
+    int j = 0x08000001; // j 1
 
+    string t1 = "addi $t1, $t2, -100";
+    string t2 = "add $t1, $t2, $t3";
+    string j1 = "j 100";
 
-    Disassembler dis = Disassembler();
+    Assembler a = Assembler();
 
-    cout << "ADD: " << dis.assembleLine((dis.breakChunk(add))) << endl;
-    cout << "ADDI: " << dis.assembleLine((dis.breakChunk(addi))) << endl;
-    cout << "ADDI2: " << dis.assembleLine((dis.breakChunk(addi2))) << endl;
-    cout << "j: " << dis.assembleLine((dis.breakChunk(j))) << endl;
+    vector<int> tokens;
+//    auto tokens = a.parseLine(t1);
+//    printVector(tokens);
+
+    tokens = a.parseLine(t2);
+    printVector(tokens);
+    tokens = a.parseLine(j1);
+    printVector(tokens);
 
 
 //    if (inFile.is_open()) {
@@ -91,3 +55,4 @@ int main() {
 //    outFile.close();
     return 0;
 }
+

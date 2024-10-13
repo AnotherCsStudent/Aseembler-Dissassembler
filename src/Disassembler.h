@@ -10,10 +10,11 @@ using namespace std;
 class Disassembler {
 public:
     Disassembler();
-    std::vector<int> breakChunk(int bin_line);
-    std::string assembleLine(std::vector<int> chunkedLine);
+    std::vector<int> chunkLine(int bin_line);
+    std::string disassembleLine(vector<int> chunkedLine);
+    std::string disassembleFile(ifstream &inFile, ofstream &outFile);
 private:
-    DisassemblerMaps maps;
+    DisassemblerMaps map;
 };
 
 #endif //ASSEMBLER_DISASSEMBLER_H
