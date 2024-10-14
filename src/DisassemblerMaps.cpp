@@ -19,7 +19,7 @@ std::string DisassemblerMaps::find(std::unordered_map<int, std::string>& map , i
     if (it != map.end()) {
         return it->second;
     } else {
-        std::cerr << "Warning: Token not found in HashMap";
+        std::cerr << "Warning: Token not found in HashMap\n";
         return "-------------------";
     }
 

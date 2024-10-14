@@ -12,9 +12,10 @@ public:
     Disassembler();
     std::vector<int> chunkLine(int bin_line);
     std::string disassembleLine(vector<int> chunkedLine);
-    std::string disassembleFile(ifstream &inFile, ofstream &outFile);
+    string disassembleChunk(int chunk);
 private:
     DisassemblerMaps map;
+
 };
 
 #endif //ASSEMBLER_DISASSEMBLER_H

@@ -3,6 +3,8 @@
 #include <vector>
 #include "AssemblerMaps.h"
 #include <cmath>
+#include <bitset>
+#include <cstdint>
 
 using namespace std;
 
@@ -35,7 +37,7 @@ vector<string> Assembler::split(string inputString, char delimiter) {
     return tokens;
 }
 
-string Assembler::strip(string inputString , char deleteChar) {
+string Assembler::strip(string inputString, char deleteChar) {
     string returnString = "";
 
     for (int i = 0; i < inputString.length(); i++) {
@@ -48,7 +50,7 @@ string Assembler::strip(string inputString , char deleteChar) {
 
 }
 
-vector<int> Assembler::parseLine(string inputString) {
+int Assembler::parseLine(string inputString) {
     vector<string> returnTokens = split(inputString, ' ');
     vector<string> cleanedTokens = vector<string>();
     AssemblerMaps map = AssemblerMaps();
@@ -61,32 +63,74 @@ vector<int> Assembler::parseLine(string inputString) {
     vector<int> machineCode = vector<int>();
     int initialToken = map.find(map.OPCODES, cleanedTokens[0]);
 
-    printVector(cleanedTokens);
-
+    int machineCodeBits = 0;
 
     // r-type instructions
     if (initialToken == 0b000000) {
         machineCode.push_back(initialToken);
         int i = 0;
-        cout << cleanedTokens.size();
         for (i = 1; i < cleanedTokens.size(); i++) {
-            cout << cleanedTokens.size();
             machineCode.push_back(map.find(map.REGISTERS, cleanedTokens[i]));
         }
         // there are 4 register slots, and unfilled ones need to be filled with blank registers
-        for (int j = 0; i < 4; i++) {
+        for (int j = 0; i <= 4; i++) {
             machineCode.push_back(0b00000);
         }
         machineCode.push_back(map.find(map.FUNC_CODES, cleanedTokens[0]));
 
+        // machine code should have 6 segments (6-5-5-5-5-6), now combine them
+        machineCodeBits |= machineCode[0];
+        machineCodeBits <<= 6;
+        // 2-1-3 because mips moment
+        machineCodeBits |= machineCode[2];
+        machineCodeBits <<= 5;
+        machineCodeBits |= machineCode[3];
+        machineCodeBits <<= 5;
+        machineCodeBits |= machineCode[1];
+        machineCodeBits <<= 5;
+        machineCodeBits |= machineCode[4];
+        machineCodeBits <<= 6;
+        machineCodeBits |= machineCode[5];
+
+    // j type instructions
     } else if (initialToken == 0b000010 || initialToken == 0b000011) {
         machineCode.push_back(map.find(map.OPCODES, cleanedTokens[0]));
         int literalValue = stoi(cleanedTokens[1]);
         machineCode.push_back(literalValue);
+
+        machineCodeBits |= machineCode[0];
+        machineCodeBits <<= 26;
+        machineCodeBits |= machineCode[1];
+
+    // i-type instructions
     } else {
         machineCode.push_back(map.find(map.OPCODES, cleanedTokens[0]));
+
+        // only 1 register
+        if (cleanedTokens.size() == 2) {
+            machineCode.push_back(map.find(map.REGISTERS, cleanedTokens[1]));
+            machineCode.push_back(0b00000);
+            machineCode.push_back(stoi(cleanedTokens[2]));
+
+        // then there must be 2 registers
+        } else {
+            machineCode.push_back(map.find(map.REGISTERS, cleanedTokens[1]));
+            machineCode.push_back(map.find(map.REGISTERS, cleanedTokens[2]));
+            machineCode.push_back(stoi(cleanedTokens[3]));
+
+        }
+
+        machineCodeBits |= machineCode[0];
+        machineCodeBits <<= 5;
+        machineCodeBits |= machineCode[2];
+        machineCodeBits <<= 5;
+        machineCodeBits |= machineCode[1];
+        machineCodeBits <<= 16;
+        // convert to short to truncate the value to 16 bits
+        machineCodeBits |= (uint16_t)(machineCode[3]);
+
     }
 
 
-    return machineCode;
+    return machineCodeBits;
 }

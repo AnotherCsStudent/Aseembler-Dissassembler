@@ -92,6 +92,6 @@ string Disassembler::disassembleLine(vector<int> chunkedLine) {
     return returnLine;
 }
 
-std::string Disassembler::disassembleFile(ifstream &inFile, ofstream &outFile) {
-    return std::string();
+std::string Disassembler::disassembleChunk(int chunk) {
+    return disassembleLine(chunkLine(chunk));
 }

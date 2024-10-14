@@ -11,7 +11,7 @@ public:
 
     std::string strip(std::string inputString, char deleteChar);
 
-    std::vector<int> parseLine(std::string inputString);
+    int parseLine(std::string inputString);
 };
 
 
